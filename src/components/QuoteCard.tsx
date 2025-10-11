@@ -23,92 +23,100 @@ export const QuoteCard = forwardRef<HTMLDivElement, QuoteCardProps>(
         style={{
           width: dimensions.width,
           height: dimensions.height,
-          padding: aspectRatio === "square" ? "80px" : "120px",
           fontFamily: "Inter, sans-serif",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
+          position: "relative",
         }}
       >
-        {/* Profile Section */}
-        <div style={{ display: "flex", alignItems: "center", gap: "20px", marginBottom: "60px" }}>
-          {/* Profile Image */}
-          <div
-            style={{
-              width: "80px",
-              height: "80px",
-              borderRadius: "50%",
-              overflow: "hidden",
-              backgroundColor: "#f0f0f0",
-              flexShrink: 0,
-            }}
-          >
-            {profileImage ? (
-              <img
-                src={profileImage}
-                alt="Profile"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                }}
-              />
-            ) : (
-              <div
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  backgroundColor: "#e0e0e0",
-                  color: "#999",
-                  fontSize: "32px",
-                  fontWeight: 600,
-                }}
-              >
-                {name ? name[0].toUpperCase() : "?"}
-              </div>
-            )}
-          </div>
-
-          {/* Name and Username */}
-          <div>
-            <div
-              style={{
-                fontSize: "28px",
-                fontWeight: 600,
-                color: "#000000",
-                marginBottom: "4px",
-              }}
-            >
-              {name || "Tu Nombre"}
-            </div>
-            <div
-              style={{
-                fontSize: "24px",
-                fontWeight: 400,
-                color: "#5B7083",
-              }}
-            >
-              @{username || "usuario"}
-            </div>
-          </div>
-        </div>
-
-        {/* Quote Text */}
         <div
           style={{
-            fontSize: aspectRatio === "square" ? "42px" : "48px",
-            fontWeight: isBold ? 700 : 500,
-            fontStyle: isItalic ? "italic" : "normal",
-            color: "#000000",
-            lineHeight: "1.4",
-            whiteSpace: "pre-wrap",
-            wordBreak: "break-word",
+            position: "absolute",
+            top: "50%",
+            left: "0",
+            right: "0",
+            transform: "translateY(-50%)",
+            padding: aspectRatio === "square" ? "80px" : "120px",
           }}
         >
-          {quote || "Escribe tu frase inspiradora aquí..."}
+          {/* Profile Section */}
+          <div style={{ display: "flex", alignItems: "center", gap: "20px", marginBottom: "60px" }}>
+            {/* Profile Image */}
+            <div
+              style={{
+                width: "80px",
+                height: "80px",
+                borderRadius: "50%",
+                overflow: "hidden",
+                backgroundColor: "#f0f0f0",
+                flexShrink: 0,
+              }}
+            >
+              {profileImage ? (
+                <img
+                  src={profileImage}
+                  alt="Profile"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                  }}
+                />
+              ) : (
+                <div
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    backgroundColor: "#e0e0e0",
+                    color: "#999",
+                    fontSize: "32px",
+                    fontWeight: 600,
+                  }}
+                >
+                  {name ? name[0].toUpperCase() : "?"}
+                </div>
+              )}
+            </div>
+
+            {/* Name and Username */}
+            <div>
+              <div
+                style={{
+                  fontSize: "28px",
+                  fontWeight: 600,
+                  color: "#000000",
+                  marginBottom: "4px",
+                }}
+              >
+                {name || "Tu Nombre"}
+              </div>
+              <div
+                style={{
+                  fontSize: "24px",
+                  fontWeight: 400,
+                  color: "#5B7083",
+                }}
+              >
+                @{username || "usuario"}
+              </div>
+            </div>
+          </div>
+
+          {/* Quote Text */}
+          <div
+            style={{
+              fontSize: aspectRatio === "square" ? "42px" : "48px",
+              fontWeight: isBold ? 700 : 500,
+              fontStyle: isItalic ? "italic" : "normal",
+              color: "#000000",
+              lineHeight: "1.4",
+              whiteSpace: "pre-wrap",
+              wordBreak: "break-word",
+            }}
+          >
+            {quote || "Escribe tu frase inspiradora aquí..."}
+          </div>
         </div>
       </div>
     );
