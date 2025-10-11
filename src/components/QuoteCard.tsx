@@ -6,10 +6,12 @@ interface QuoteCardProps {
   username: string;
   quote: string;
   aspectRatio: "square" | "vertical";
+  isBold: boolean;
+  isItalic: boolean;
 }
 
 export const QuoteCard = forwardRef<HTMLDivElement, QuoteCardProps>(
-  ({ profileImage, name, username, quote, aspectRatio }, ref) => {
+  ({ profileImage, name, username, quote, aspectRatio, isBold, isItalic }, ref) => {
     const dimensions = aspectRatio === "square" 
       ? { width: "1080px", height: "1080px" }
       : { width: "1080px", height: "1920px" };
@@ -23,6 +25,9 @@ export const QuoteCard = forwardRef<HTMLDivElement, QuoteCardProps>(
           height: dimensions.height,
           padding: aspectRatio === "square" ? "80px" : "120px",
           fontFamily: "Inter, sans-serif",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
         }}
       >
         {/* Profile Section */}
@@ -95,7 +100,8 @@ export const QuoteCard = forwardRef<HTMLDivElement, QuoteCardProps>(
         <div
           style={{
             fontSize: aspectRatio === "square" ? "42px" : "48px",
-            fontWeight: 500,
+            fontWeight: isBold ? 700 : 500,
+            fontStyle: isItalic ? "italic" : "normal",
             color: "#000000",
             lineHeight: "1.4",
             whiteSpace: "pre-wrap",

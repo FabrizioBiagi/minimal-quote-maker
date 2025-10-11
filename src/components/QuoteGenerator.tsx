@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import { QuoteCard } from "./QuoteCard";
 import { Download, Upload, Image as ImageIcon } from "lucide-react";
 import html2canvas from "html2canvas";
@@ -14,6 +15,8 @@ export const QuoteGenerator = () => {
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [quote, setQuote] = useState("");
+  const [isBold, setIsBold] = useState(false);
+  const [isItalic, setIsItalic] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
 
   const squareCardRef = useRef<HTMLDivElement>(null);
@@ -105,6 +108,8 @@ export const QuoteGenerator = () => {
           username={username}
           quote={quote}
           aspectRatio="square"
+          isBold={isBold}
+          isItalic={isItalic}
         />
         <QuoteCard
           ref={verticalCardRef}
@@ -113,6 +118,8 @@ export const QuoteGenerator = () => {
           username={username}
           quote={quote}
           aspectRatio="vertical"
+          isBold={isBold}
+          isItalic={isItalic}
         />
       </div>
 
@@ -207,6 +214,40 @@ export const QuoteGenerator = () => {
               />
             </div>
 
+            <div>
+              <Label className="text-base font-semibold mb-3 block">
+                Estilo de Texto
+              </Label>
+              <div className="flex gap-6">
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="bold"
+                    checked={isBold}
+                    onCheckedChange={(checked) => setIsBold(checked as boolean)}
+                  />
+                  <label
+                    htmlFor="bold"
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    Negrita
+                  </label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="italic"
+                    checked={isItalic}
+                    onCheckedChange={(checked) => setIsItalic(checked as boolean)}
+                  />
+                  <label
+                    htmlFor="italic"
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    Cursiva
+                  </label>
+                </div>
+              </div>
+            </div>
+
             <div className="pt-4 space-y-3">
               <Button
                 onClick={() => downloadImage("square")}
@@ -246,6 +287,8 @@ export const QuoteGenerator = () => {
                         username={username}
                         quote={quote}
                         aspectRatio="square"
+                        isBold={isBold}
+                        isItalic={isItalic}
                       />
                     </div>
                   </div>
@@ -267,6 +310,8 @@ export const QuoteGenerator = () => {
                         username={username}
                         quote={quote}
                         aspectRatio="vertical"
+                        isBold={isBold}
+                        isItalic={isItalic}
                       />
                     </div>
                   </div>
