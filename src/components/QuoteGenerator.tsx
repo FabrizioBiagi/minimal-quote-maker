@@ -96,6 +96,26 @@ export const QuoteGenerator = () => {
 
   return (
     <div className="min-h-screen bg-background py-12 px-4">
+      {/* Hidden cards at full size for html2canvas capture */}
+      <div style={{ position: "absolute", left: "-9999px", top: 0 }}>
+        <QuoteCard
+          ref={squareCardRef}
+          profileImage={profileImage}
+          name={name}
+          username={username}
+          quote={quote}
+          aspectRatio="square"
+        />
+        <QuoteCard
+          ref={verticalCardRef}
+          profileImage={profileImage}
+          name={name}
+          username={username}
+          quote={quote}
+          aspectRatio="vertical"
+        />
+      </div>
+
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold mb-3 text-foreground">
@@ -221,7 +241,6 @@ export const QuoteGenerator = () => {
                   <div className="w-full max-w-[400px] aspect-square bg-white shadow-sm">
                     <div className="scale-[0.37] origin-top-left">
                       <QuoteCard
-                        ref={squareCardRef}
                         profileImage={profileImage}
                         name={name}
                         username={username}
@@ -243,7 +262,6 @@ export const QuoteGenerator = () => {
                   <div className="w-full max-w-[225px] aspect-[9/16] bg-white shadow-sm">
                     <div className="scale-[0.208] origin-top-left">
                       <QuoteCard
-                        ref={verticalCardRef}
                         profileImage={profileImage}
                         name={name}
                         username={username}
