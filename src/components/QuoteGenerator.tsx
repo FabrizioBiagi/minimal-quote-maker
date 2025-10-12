@@ -29,7 +29,7 @@ export const QuoteGenerator = () => {
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [quote, setQuote] = useState("");
-  const [bulkQuotes, setBulkQuotes] = useState("");
+  const [bulkQuotes, setBulkQuotes] = useState<string[]>([""]);
   const [isBold, setIsBold] = useState(false);
   const [isItalic, setIsItalic] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -114,8 +114,25 @@ export const QuoteGenerator = () => {
     }
   };
 
+  const addBulkQuote = () => {
+    setBulkQuotes([...bulkQuotes, ""]);
+  };
+
+  const updateBulkQuote = (index: number, value: string) => {
+    const newQuotes = [...bulkQuotes];
+    newQuotes[index] = value;
+    setBulkQuotes(newQuotes);
+  };
+
+  const removeBulkQuote = (index: number) => {
+    if (bulkQuotes.length > 1) {
+      const newQuotes = bulkQuotes.filter((_, i) => i !== index);
+      setBulkQuotes(newQuotes);
+    }
+  };
+
   const downloadBulkImages = async (aspectRatio: "square" | "vertical") => {
-    const quotes = bulkQuotes.split("\n").filter(q => q.trim() !== "");
+    const quotes = bulkQuotes.filter(q => q.trim() !== "");
     
     if (quotes.length === 0) {
       toast.error("Por favor ingresa al menos una frase");
@@ -435,19 +452,43 @@ export const QuoteGenerator = () => {
                 </div>
 
                 <div>
-                  <Label htmlFor="bulk-quotes" className="text-base font-semibold mb-3 block">
-                    Frases (una por línea)
-                  </Label>
-                  <Textarea
-                    id="bulk-quotes"
-                    value={bulkQuotes}
-                    onChange={(e) => setBulkQuotes(e.target.value)}
-                    placeholder="Escribe cada frase en una línea diferente...&#10;Primera frase aquí&#10;Segunda frase aquí&#10;Tercera frase aquí"
-                    className="min-h-[200px] text-base resize-none"
-                  />
-                  <p className="text-sm text-muted-foreground mt-2">
-                    {bulkQuotes.split("\n").filter(q => q.trim() !== "").length} frases
-                  </p>
+                  <div className="flex items-center justify-between mb-3">
+                    <Label className="text-base font-semibold">
+                      Frases ({bulkQuotes.filter(q => q.trim() !== "").length})
+                    </Label>
+                    <Button
+                      type="button"
+                      onClick={addBulkQuote}
+                      variant="outline"
+                      size="sm"
+                      className="h-8"
+                    >
+                      + Agregar Frase
+                    </Button>
+                  </div>
+                  <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2">
+                    {bulkQuotes.map((quote, index) => (
+                      <div key={index} className="flex gap-2 items-start">
+                        <Textarea
+                          value={quote}
+                          onChange={(e) => updateBulkQuote(index, e.target.value)}
+                          placeholder={`Frase ${index + 1}...`}
+                          className="min-h-[60px] text-base resize-none"
+                        />
+                        {bulkQuotes.length > 1 && (
+                          <Button
+                            type="button"
+                            onClick={() => removeBulkQuote(index)}
+                            variant="ghost"
+                            size="sm"
+                            className="h-[60px] px-3 text-muted-foreground hover:text-destructive"
+                          >
+                            ×
+                          </Button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
                 </div>
 
                 <div>
