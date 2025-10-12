@@ -10,6 +10,19 @@ import { Download, Upload, Image as ImageIcon } from "lucide-react";
 import html2canvas from "html2canvas";
 import { toast } from "sonner";
 
+const generateRandomStats = () => ({
+  comments: formatNumber(Math.floor(Math.random() * 500) + 10),
+  retweets: formatNumber(Math.floor(Math.random() * 800) + 20),
+  likes: formatNumber(Math.floor(Math.random() * 5000) + 100),
+  views: formatNumber(Math.floor(Math.random() * 50000) + 1000),
+});
+
+const formatNumber = (num: number): string => {
+  if (num >= 1000000) return (num / 1000000).toFixed(1) + "M";
+  if (num >= 1000) return (num / 1000).toFixed(1) + "K";
+  return num.toString();
+};
+
 export const QuoteGenerator = () => {
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [name, setName] = useState("");
@@ -18,6 +31,7 @@ export const QuoteGenerator = () => {
   const [isBold, setIsBold] = useState(false);
   const [isItalic, setIsItalic] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [stats, setStats] = useState(generateRandomStats());
 
   const squareCardRef = useRef<HTMLDivElement>(null);
   const verticalCardRef = useRef<HTMLDivElement>(null);
@@ -64,6 +78,7 @@ export const QuoteGenerator = () => {
 
   const downloadImage = async (aspectRatio: "square" | "vertical") => {
     setIsGenerating(true);
+    setStats(generateRandomStats());
     
     try {
       const cardRef = aspectRatio === "square" ? squareCardRef : verticalCardRef;
@@ -110,6 +125,7 @@ export const QuoteGenerator = () => {
           aspectRatio="square"
           isBold={isBold}
           isItalic={isItalic}
+          stats={stats}
         />
         <QuoteCard
           ref={verticalCardRef}
@@ -120,6 +136,7 @@ export const QuoteGenerator = () => {
           aspectRatio="vertical"
           isBold={isBold}
           isItalic={isItalic}
+          stats={stats}
         />
       </div>
 
@@ -289,6 +306,7 @@ export const QuoteGenerator = () => {
                         aspectRatio="square"
                         isBold={isBold}
                         isItalic={isItalic}
+                        stats={stats}
                       />
                     </div>
                   </div>
@@ -312,6 +330,7 @@ export const QuoteGenerator = () => {
                         aspectRatio="vertical"
                         isBold={isBold}
                         isItalic={isItalic}
+                        stats={stats}
                       />
                     </div>
                   </div>

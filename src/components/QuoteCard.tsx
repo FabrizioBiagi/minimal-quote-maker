@@ -8,10 +8,16 @@ interface QuoteCardProps {
   aspectRatio: "square" | "vertical";
   isBold: boolean;
   isItalic: boolean;
+  stats?: {
+    comments: string;
+    retweets: string;
+    likes: string;
+    views: string;
+  };
 }
 
 export const QuoteCard = forwardRef<HTMLDivElement, QuoteCardProps>(
-  ({ profileImage, name, username, quote, aspectRatio, isBold, isItalic }, ref) => {
+  ({ profileImage, name, username, quote, aspectRatio, isBold, isItalic, stats }, ref) => {
     const dimensions = aspectRatio === "square" 
       ? { width: "1080px", height: "1080px" }
       : { width: "1080px", height: "1920px" };
@@ -117,6 +123,55 @@ export const QuoteCard = forwardRef<HTMLDivElement, QuoteCardProps>(
           >
             {quote || "Escribe tu frase inspiradora aquí..."}
           </div>
+
+          {/* Stats Section */}
+          {stats && (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "40px",
+                marginTop: "60px",
+              }}
+            >
+              {/* Comments */}
+              <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#536471" strokeWidth="2">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                </svg>
+                <span style={{ fontSize: "20px", color: "#536471" }}>{stats.comments}</span>
+              </div>
+
+              {/* Retweets */}
+              <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#536471" strokeWidth="2">
+                  <path d="M17 1l4 4-4 4" />
+                  <path d="M3 11V9a4 4 0 0 1 4-4h14" />
+                  <path d="M7 23l-4-4 4-4" />
+                  <path d="M21 13v2a4 4 0 0 1-4 4H3" />
+                </svg>
+                <span style={{ fontSize: "20px", color: "#536471" }}>{stats.retweets}</span>
+              </div>
+
+              {/* Likes */}
+              <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#536471" strokeWidth="2">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                </svg>
+                <span style={{ fontSize: "20px", color: "#536471" }}>{stats.likes}</span>
+              </div>
+
+              {/* Views */}
+              <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#536471" strokeWidth="2">
+                  <path d="M18 20V10" />
+                  <path d="M12 20V4" />
+                  <path d="M6 20v-6" />
+                </svg>
+                <span style={{ fontSize: "20px", color: "#536471" }}>{stats.views}</span>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     );
