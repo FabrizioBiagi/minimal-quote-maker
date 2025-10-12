@@ -5,6 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { QuoteCard } from "./QuoteCard";
 import { Download, Upload, Image as ImageIcon } from "lucide-react";
 import html2canvas from "html2canvas";
@@ -28,6 +29,7 @@ export const QuoteGenerator = () => {
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [quote, setQuote] = useState("");
+  const [bulkQuotes, setBulkQuotes] = useState("");
   const [isBold, setIsBold] = useState(false);
   const [isItalic, setIsItalic] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -112,6 +114,77 @@ export const QuoteGenerator = () => {
     }
   };
 
+  const downloadBulkImages = async (aspectRatio: "square" | "vertical") => {
+    const quotes = bulkQuotes.split("\n").filter(q => q.trim() !== "");
+    
+    if (quotes.length === 0) {
+      toast.error("Por favor ingresa al menos una frase");
+      return;
+    }
+
+    setIsGenerating(true);
+    
+    try {
+      for (let i = 0; i < quotes.length; i++) {
+        const currentQuote = quotes[i].trim();
+        const currentStats = generateRandomStats();
+        
+        // Create a temporary hidden div for this quote
+        const tempDiv = document.createElement("div");
+        tempDiv.style.position = "absolute";
+        tempDiv.style.left = "-9999px";
+        document.body.appendChild(tempDiv);
+        
+        // Render the QuoteCard into the temp div
+        const { createRoot } = await import("react-dom/client");
+        const root = createRoot(tempDiv);
+        
+        await new Promise<void>((resolve) => {
+          root.render(
+            <QuoteCard
+              profileImage={profileImage}
+              name={name}
+              username={username}
+              quote={currentQuote}
+              aspectRatio={aspectRatio}
+              isBold={isBold}
+              isItalic={isItalic}
+              stats={currentStats}
+            />
+          );
+          setTimeout(resolve, 100);
+        });
+
+        const canvas = await html2canvas(tempDiv.firstChild as HTMLElement, {
+          backgroundColor: "#ffffff",
+          scale: 1,
+          logging: false,
+          width: 1080,
+          height: aspectRatio === "square" ? 1080 : 1920,
+        });
+
+        const link = document.createElement("a");
+        const suffix = aspectRatio === "square" ? "cuadrado" : "tiktok";
+        link.download = `quote-${i + 1}-${suffix}.png`;
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+
+        root.unmount();
+        document.body.removeChild(tempDiv);
+        
+        // Small delay between downloads
+        await new Promise(resolve => setTimeout(resolve, 500));
+      }
+
+      toast.success(`${quotes.length} imágenes descargadas correctamente`);
+    } catch (error) {
+      console.error("Error generating bulk images:", error);
+      toast.error("Error al generar las imágenes");
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background py-12 px-4">
       {/* Hidden cards at full size for html2canvas capture */}
@@ -152,7 +225,14 @@ export const QuoteGenerator = () => {
 
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Input Form */}
-          <Card className="p-6 space-y-6 shadow-lg">
+          <Card className="p-6 shadow-lg">
+            <Tabs defaultValue="individual" className="w-full">
+              <TabsList className="grid w-full grid-cols-2 mb-6">
+                <TabsTrigger value="individual">Individual</TabsTrigger>
+                <TabsTrigger value="masivo">Masivo</TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="individual" className="space-y-6">
             <div>
               <Label htmlFor="profile-image" className="text-base font-semibold mb-3 block">
                 Foto de Perfil
@@ -265,27 +345,168 @@ export const QuoteGenerator = () => {
               </div>
             </div>
 
-            <div className="pt-4 space-y-3">
-              <Button
-                onClick={() => downloadImage("square")}
-                disabled={isGenerating}
-                className="w-full"
-                size="lg"
-              >
-                <Download className="w-4 h-4 mr-2" />
-                Descargar 1:1 (1080x1080)
-              </Button>
-              <Button
-                onClick={() => downloadImage("vertical")}
-                disabled={isGenerating}
-                variant="secondary"
-                className="w-full"
-                size="lg"
-              >
-                <Download className="w-4 h-4 mr-2" />
-                Descargar 9:16 (1080x1920)
-              </Button>
-            </div>
+                <div className="pt-4 space-y-3">
+                  <Button
+                    onClick={() => downloadImage("square")}
+                    disabled={isGenerating}
+                    className="w-full"
+                    size="lg"
+                  >
+                    <Download className="w-4 h-4 mr-2" />
+                    Descargar 1:1 (1080x1080)
+                  </Button>
+                  <Button
+                    onClick={() => downloadImage("vertical")}
+                    disabled={isGenerating}
+                    variant="secondary"
+                    className="w-full"
+                    size="lg"
+                  >
+                    <Download className="w-4 h-4 mr-2" />
+                    Descargar 9:16 (1080x1920)
+                  </Button>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="masivo" className="space-y-6">
+                <div>
+                  <Label htmlFor="profile-image-bulk" className="text-base font-semibold mb-3 block">
+                    Foto de Perfil
+                  </Label>
+                  <div className="flex items-center gap-4">
+                    {profileImage ? (
+                      <img
+                        src={profileImage}
+                        alt="Preview"
+                        className="w-20 h-20 rounded-full object-cover border-2 border-border"
+                      />
+                    ) : (
+                      <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center">
+                        <ImageIcon className="w-8 h-8 text-muted-foreground" />
+                      </div>
+                    )}
+                    <label htmlFor="profile-image-bulk">
+                      <Button variant="secondary" className="cursor-pointer" asChild>
+                        <span>
+                          <Upload className="w-4 h-4 mr-2" />
+                          Cargar Imagen
+                        </span>
+                      </Button>
+                    </label>
+                    <input
+                      id="profile-image-bulk"
+                      type="file"
+                      accept="image/jpeg,image/png,image/jpg"
+                      onChange={handleImageUpload}
+                      className="hidden"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <Label htmlFor="name-bulk" className="text-base font-semibold mb-3 block">
+                    Nombre
+                  </Label>
+                  <Input
+                    id="name-bulk"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Ingresa tu nombre"
+                    className="text-base"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="username-bulk" className="text-base font-semibold mb-3 block">
+                    Usuario
+                  </Label>
+                  <div className="relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                      @
+                    </span>
+                    <Input
+                      id="username-bulk"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      placeholder="usuario"
+                      className="text-base pl-8"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <Label htmlFor="bulk-quotes" className="text-base font-semibold mb-3 block">
+                    Frases (una por línea)
+                  </Label>
+                  <Textarea
+                    id="bulk-quotes"
+                    value={bulkQuotes}
+                    onChange={(e) => setBulkQuotes(e.target.value)}
+                    placeholder="Escribe cada frase en una línea diferente...&#10;Primera frase aquí&#10;Segunda frase aquí&#10;Tercera frase aquí"
+                    className="min-h-[200px] text-base resize-none"
+                  />
+                  <p className="text-sm text-muted-foreground mt-2">
+                    {bulkQuotes.split("\n").filter(q => q.trim() !== "").length} frases
+                  </p>
+                </div>
+
+                <div>
+                  <Label className="text-base font-semibold mb-3 block">
+                    Estilo de Texto
+                  </Label>
+                  <div className="flex gap-6">
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="bold-bulk"
+                        checked={isBold}
+                        onCheckedChange={(checked) => setIsBold(checked as boolean)}
+                      />
+                      <label
+                        htmlFor="bold-bulk"
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      >
+                        Negrita
+                      </label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="italic-bulk"
+                        checked={isItalic}
+                        onCheckedChange={(checked) => setIsItalic(checked as boolean)}
+                      />
+                      <label
+                        htmlFor="italic-bulk"
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      >
+                        Cursiva
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="pt-4 space-y-3">
+                  <Button
+                    onClick={() => downloadBulkImages("square")}
+                    disabled={isGenerating}
+                    className="w-full"
+                    size="lg"
+                  >
+                    <Download className="w-4 h-4 mr-2" />
+                    Descargar Todas 1:1 (1080x1080)
+                  </Button>
+                  <Button
+                    onClick={() => downloadBulkImages("vertical")}
+                    disabled={isGenerating}
+                    variant="secondary"
+                    className="w-full"
+                    size="lg"
+                  >
+                    <Download className="w-4 h-4 mr-2" />
+                    Descargar Todas 9:16 (1080x1920)
+                  </Button>
+                </div>
+              </TabsContent>
+            </Tabs>
           </Card>
 
           {/* Preview */}
