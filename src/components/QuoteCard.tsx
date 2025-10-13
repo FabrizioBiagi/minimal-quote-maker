@@ -50,8 +50,8 @@ export const QuoteCard = forwardRef<HTMLDivElement, QuoteCardProps>(
             <div
               style={{
                 marginTop: "18px",
-                width: "100px",
-                height: "100px",
+                width: "120px",
+                height: "120px",
                 borderRadius: "50%",
                 overflow: "hidden",
                 backgroundColor: isDarkMode ? "#1a1a1a" : "#f0f0f0",
