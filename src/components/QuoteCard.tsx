@@ -133,7 +133,7 @@ export const QuoteCard = forwardRef<HTMLDivElement, QuoteCardProps>(
                 display: "flex",
                 alignItems: "center",
                 gap: "40px",
-                marginTop: "70px",
+                marginTop: "20px",
               }}
             >
               {/* Comments */}
