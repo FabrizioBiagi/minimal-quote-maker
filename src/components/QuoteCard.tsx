@@ -133,22 +133,19 @@ export const QuoteCard = forwardRef<HTMLDivElement, QuoteCardProps>(
                 display: "flex",
                 alignItems: "center",
                 gap: "40px",
-                marginTop: "20px",
+                marginTop: "70px",
               }}
             >
               {/* Comments */}
               <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
                 <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke={isDarkMode ? "#8B98A5" : "#536471"} strokeWidth="2">
-                  <path d="se M17 1l4 4-4 4" />
-                  <path d="M3 11V9a4 4 0 0 1 4-4h14" />
-                  <path d="M7 23l-4-4 4-4" />
-                  <path d="M21 13v2a4 4 0 0 1-4 4H3" />
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
                 </svg>
                 <span style={{ 
-                    fontSize: "30px", 
-                    color: isDarkMode ? "#8B98A5" : "#536471", 
-                    
-                    top: "-10px" // Ajuste fino: 2px hacia abajo
+                    fontSize: "20px", 
+                    color: "#536471", 
+                    position: "relative", // Necesario para que 'top' funcione
+                    top: "-18px" // Ajuste fino: 2px hacia abajo
                 }}>{stats.comments}</span>
               </div>
 
@@ -160,12 +157,7 @@ export const QuoteCard = forwardRef<HTMLDivElement, QuoteCardProps>(
                   <path d="M7 23l-4-4 4-4" />
                   <path d="M21 13v2a4 4 0 0 1-4 4H3" />
                 </svg>
-                <span style={{ 
-                    fontSize: "30px", 
-                    color: isDarkMode ? "#8B98A5" : "#536471", 
-                    
-                    top: "-10px" // Ajuste fino: 2px hacia abajo
-                }}>{stats.comments}</span>
+                <span style={{ fontSize: "30px", color: isDarkMode ? "#8B98A5" : "#536471" }}>{stats.retweets}</span>
               </div>
 
               {/* Likes */}
