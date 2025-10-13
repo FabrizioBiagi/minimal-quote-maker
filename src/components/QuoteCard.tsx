@@ -143,7 +143,7 @@ export const QuoteCard = forwardRef<HTMLDivElement, QuoteCardProps>(
                 </svg>
                 <span style={{ 
                     fontSize: "30px", 
-                    color: isDarkMode ? "#8B98A5" : "#536471", 
+                    color: "#536471", 
                     position: "relative", // Necesario para que 'top' funcione
                     top: "-10px" // Ajuste fino: 2px hacia abajo
                 }}>{stats.comments}</span>
