@@ -9,6 +9,7 @@ interface QuoteCardProps {
   isBold: boolean;
   isItalic: boolean;
   isDarkMode: boolean;
+  profileSize: number;
   stats?: {
     comments: string;
     retweets: string;
@@ -18,7 +19,7 @@ interface QuoteCardProps {
 }
 
 export const QuoteCard = forwardRef<HTMLDivElement, QuoteCardProps>(
-  ({ profileImage, name, username, quote, aspectRatio, isBold, isItalic, isDarkMode, stats }, ref) => {
+  ({ profileImage, name, username, quote, aspectRatio, isBold, isItalic, isDarkMode, profileSize, stats }, ref) => {
     const dimensions = aspectRatio === "square" 
       ? { width: "1080px", height: "1080px" }
       : { width: "1080px", height: "1920px" };
@@ -49,8 +50,8 @@ export const QuoteCard = forwardRef<HTMLDivElement, QuoteCardProps>(
             {/* Profile Image */}
             <div
               style={{
-                width: "70px",
-                height: "70px",
+                width: `${profileSize}px`,
+                height: `${profileSize}px`,
                 borderRadius: "50%",
                 overflow: "hidden",
                 backgroundColor: isDarkMode ? "#1a1a1a" : "#f0f0f0",
