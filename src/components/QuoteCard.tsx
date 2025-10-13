@@ -45,7 +45,7 @@ export const QuoteCard = forwardRef<HTMLDivElement, QuoteCardProps>(
           }}
         >
           {/* Profile Section */}
-          <div style={{ display: "flex", alignItems: "center", gap: "20px", marginBottom: "40px" }}>
+          <div style={{ display: "flex", alignItems: "flex-start", gap: "20px", marginBottom: "40px" }}>
             {/* Profile Image */}
             <div
               style={{
