@@ -49,8 +49,8 @@ export const QuoteCard = forwardRef<HTMLDivElement, QuoteCardProps>(
             {/* Profile Image */}
             <div
               style={{
-                width: "80px",
-                height: "80px",
+                width: "70px",
+                height: "70px",
                 borderRadius: "50%",
                 overflow: "hidden",
                 backgroundColor: isDarkMode ? "#1a1a1a" : "#f0f0f0",
