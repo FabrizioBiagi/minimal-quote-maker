@@ -142,10 +142,10 @@ export const QuoteCard = forwardRef<HTMLDivElement, QuoteCardProps>(
                   <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
                 </svg>
                 <span style={{ 
-                    fontSize: "20px", 
+                    fontSize: "30px", 
                     color: "#536471", 
                     position: "relative", // Necesario para que 'top' funcione
-                    top: "-18px" // Ajuste fino: 2px hacia abajo
+                    top: "-10px" // Ajuste fino: 2px hacia abajo
                 }}>{stats.comments}</span>
               </div>
 
