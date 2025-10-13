@@ -138,10 +138,10 @@ export const QuoteCard = forwardRef<HTMLDivElement, QuoteCardProps>(
             >
               {/* Comments */}
               <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={isDarkMode ? "#8B98A5" : "#536471"} strokeWidth="2">
+                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke={isDarkMode ? "#8B98A5" : "#536471"} strokeWidth="2">
                   <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
                 </svg>
-                <span style={{ fontSize: "20px", color: isDarkMode ? "#8B98A5" : "#536471" }}>{stats.comments}</span>
+                <span style={{ fontSize: "30px", color: isDarkMode ? "#8B98A5" : "#536471" }}>{stats.comments}</span>
               </div>
 
               {/* Retweets */}
