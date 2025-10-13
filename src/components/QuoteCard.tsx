@@ -45,12 +45,12 @@ export const QuoteCard = forwardRef<HTMLDivElement, QuoteCardProps>(
           }}
         >
           {/* Profile Section */}
-          <div style={{ display: "flex", alignItems: "center", gap: "30px", marginBottom: "60px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "20px", marginBottom: "60px" }}>
             {/* Profile Image */}
             <div
               style={{
-                width: "100px",
-                height: "100px",
+                width: "80px",
+                height: "80px",
                 borderRadius: "50%",
                 overflow: "hidden",
                 backgroundColor: isDarkMode ? "#1a1a1a" : "#f0f0f0",
