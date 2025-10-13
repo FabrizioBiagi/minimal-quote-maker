@@ -6,7 +6,6 @@ import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Slider } from "@/components/ui/slider";
 import { QuoteCard } from "./QuoteCard";
 import { Download, Upload, Image as ImageIcon, Moon } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
@@ -35,7 +34,6 @@ export const QuoteGenerator = () => {
   const [isBold, setIsBold] = useState(false);
   const [isItalic, setIsItalic] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [profileSize, setProfileSize] = useState(70);
   const [isGenerating, setIsGenerating] = useState(false);
   const [stats, setStats] = useState(generateRandomStats());
 
@@ -171,7 +169,6 @@ export const QuoteGenerator = () => {
               isBold={isBold}
               isItalic={isItalic}
               isDarkMode={isDarkMode}
-              profileSize={profileSize}
               stats={currentStats}
             />
           );
@@ -222,7 +219,6 @@ export const QuoteGenerator = () => {
           isBold={isBold}
           isItalic={isItalic}
           isDarkMode={isDarkMode}
-          profileSize={profileSize}
           stats={stats}
         />
         <QuoteCard
@@ -235,7 +231,6 @@ export const QuoteGenerator = () => {
           isBold={isBold}
           isItalic={isItalic}
           isDarkMode={isDarkMode}
-          profileSize={profileSize}
           stats={stats}
         />
       </div>
@@ -390,20 +385,6 @@ export const QuoteGenerator = () => {
                   Modo Oscuro
                 </label>
               </div>
-            </div>
-
-            <div>
-              <Label className="text-base font-semibold mb-3 block">
-                Tamaño Foto de Perfil ({profileSize}px)
-              </Label>
-              <Slider
-                value={[profileSize]}
-                onValueChange={(value) => setProfileSize(value[0])}
-                min={50}
-                max={120}
-                step={5}
-                className="w-full"
-              />
             </div>
 
                 <div className="pt-4 space-y-3">
@@ -589,20 +570,6 @@ export const QuoteGenerator = () => {
                   </div>
                 </div>
 
-                <div>
-                  <Label className="text-base font-semibold mb-3 block">
-                    Tamaño Foto de Perfil ({profileSize}px)
-                  </Label>
-                  <Slider
-                    value={[profileSize]}
-                    onValueChange={(value) => setProfileSize(value[0])}
-                    min={50}
-                    max={120}
-                    step={5}
-                    className="w-full"
-                  />
-                </div>
-
                 <div className="pt-4 space-y-3">
                   <Button
                     onClick={() => downloadBulkImages("square")}
@@ -647,7 +614,6 @@ export const QuoteGenerator = () => {
                         isBold={isBold}
                         isItalic={isItalic}
                         isDarkMode={isDarkMode}
-                        profileSize={profileSize}
                         stats={stats}
                       />
                     </div>
@@ -673,7 +639,6 @@ export const QuoteGenerator = () => {
                         isBold={isBold}
                         isItalic={isItalic}
                         isDarkMode={isDarkMode}
-                        profileSize={profileSize}
                         stats={stats}
                       />
                     </div>
