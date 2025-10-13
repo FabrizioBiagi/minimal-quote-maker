@@ -7,7 +7,8 @@ import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { QuoteCard } from "./QuoteCard";
-import { Download, Upload, Image as ImageIcon } from "lucide-react";
+import { Download, Upload, Image as ImageIcon, Moon } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
 import html2canvas from "html2canvas";
 import { toast } from "sonner";
 
@@ -32,6 +33,7 @@ export const QuoteGenerator = () => {
   const [bulkQuotes, setBulkQuotes] = useState<string[]>([""]);
   const [isBold, setIsBold] = useState(false);
   const [isItalic, setIsItalic] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [stats, setStats] = useState(generateRandomStats());
 
@@ -91,7 +93,7 @@ export const QuoteGenerator = () => {
       }
 
       const canvas = await html2canvas(cardRef.current, {
-        backgroundColor: "#ffffff",
+        backgroundColor: isDarkMode ? "#000000" : "#ffffff",
         scale: 1,
         logging: false,
         width: 1080,
@@ -166,6 +168,7 @@ export const QuoteGenerator = () => {
               aspectRatio={aspectRatio}
               isBold={isBold}
               isItalic={isItalic}
+              isDarkMode={isDarkMode}
               stats={currentStats}
             />
           );
@@ -173,7 +176,7 @@ export const QuoteGenerator = () => {
         });
 
         const canvas = await html2canvas(tempDiv.firstChild as HTMLElement, {
-          backgroundColor: "#ffffff",
+          backgroundColor: isDarkMode ? "#000000" : "#ffffff",
           scale: 1,
           logging: false,
           width: 1080,
@@ -215,6 +218,7 @@ export const QuoteGenerator = () => {
           aspectRatio="square"
           isBold={isBold}
           isItalic={isItalic}
+          isDarkMode={isDarkMode}
           stats={stats}
         />
         <QuoteCard
@@ -226,6 +230,7 @@ export const QuoteGenerator = () => {
           aspectRatio="vertical"
           isBold={isBold}
           isItalic={isItalic}
+          isDarkMode={isDarkMode}
           stats={stats}
         />
       </div>
@@ -359,6 +364,26 @@ export const QuoteGenerator = () => {
                     Cursiva
                   </label>
                 </div>
+              </div>
+            </div>
+
+            <div>
+              <Label className="text-base font-semibold mb-3 block">
+                Tema
+              </Label>
+              <div className="flex items-center space-x-3">
+                <Switch
+                  id="dark-mode"
+                  checked={isDarkMode}
+                  onCheckedChange={setIsDarkMode}
+                />
+                <label
+                  htmlFor="dark-mode"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-2"
+                >
+                  <Moon className="w-4 h-4" />
+                  Modo Oscuro
+                </label>
               </div>
             </div>
 
@@ -525,6 +550,26 @@ export const QuoteGenerator = () => {
                   </div>
                 </div>
 
+                <div>
+                  <Label className="text-base font-semibold mb-3 block">
+                    Tema
+                  </Label>
+                  <div className="flex items-center space-x-3">
+                    <Switch
+                      id="dark-mode-bulk"
+                      checked={isDarkMode}
+                      onCheckedChange={setIsDarkMode}
+                    />
+                    <label
+                      htmlFor="dark-mode-bulk"
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-2"
+                    >
+                      <Moon className="w-4 h-4" />
+                      Modo Oscuro
+                    </label>
+                  </div>
+                </div>
+
                 <div className="pt-4 space-y-3">
                   <Button
                     onClick={() => downloadBulkImages("square")}
@@ -568,6 +613,7 @@ export const QuoteGenerator = () => {
                         aspectRatio="square"
                         isBold={isBold}
                         isItalic={isItalic}
+                        isDarkMode={isDarkMode}
                         stats={stats}
                       />
                     </div>
@@ -592,6 +638,7 @@ export const QuoteGenerator = () => {
                         aspectRatio="vertical"
                         isBold={isBold}
                         isItalic={isItalic}
+                        isDarkMode={isDarkMode}
                         stats={stats}
                       />
                     </div>
