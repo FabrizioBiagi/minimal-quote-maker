@@ -91,7 +91,7 @@ export const QuoteCard = forwardRef<HTMLDivElement, QuoteCardProps>(
             <div>
               <div
                 style={{
-                  fontSize: "34px",
+                  fontSize: "33px",
                   fontWeight: 600,
                   color: isDarkMode ? "#ffffff" : "#000000",
                   marginBottom: "4px",
@@ -101,7 +101,7 @@ export const QuoteCard = forwardRef<HTMLDivElement, QuoteCardProps>(
               </div>
               <div
                 style={{
-                  fontSize: "30px",
+                  fontSize: "29px",
                   fontWeight: 400,
                   color: isDarkMode ? "#8B98A5" : "#5B7083",
                 }}
@@ -114,7 +114,7 @@ export const QuoteCard = forwardRef<HTMLDivElement, QuoteCardProps>(
           {/* Quote Text */}
           <div
             style={{
-              fontSize: aspectRatio === "square" ? "50px" : "56px",
+              fontSize: aspectRatio === "square" ? "49px" : "55px",
               fontWeight: isBold ? 700 : 500,
               fontStyle: isItalic ? "italic" : "normal",
               color: isDarkMode ? "#ffffff" : "#000000",
@@ -157,12 +157,7 @@ export const QuoteCard = forwardRef<HTMLDivElement, QuoteCardProps>(
                   <path d="M7 23l-4-4 4-4" />
                   <path d="M21 13v2a4 4 0 0 1-4 4H3" />
                 </svg>
-                <span style={{ 
-                    fontSize: "30px", 
-                    color: isDarkMode ? "#8B98A5" : "#536471", 
-                    position: "relative", // Necesario para que 'top' funcione
-                    top: "-10px" // Ajuste fino: 2px hacia abajo
-                }}>{stats.comments}</span>
+                <span style={{ fontSize: "30px", color: isDarkMode ? "#8B98A5" : "#536471" }}>{stats.retweets}</span>
               </div>
 
               {/* Likes */}
@@ -170,12 +165,7 @@ export const QuoteCard = forwardRef<HTMLDivElement, QuoteCardProps>(
                 <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke={isDarkMode ? "#8B98A5" : "#536471"} strokeWidth="2">
                   <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
                 </svg>
-                <span style={{ 
-                    fontSize: "30px", 
-                    color: isDarkMode ? "#8B98A5" : "#536471", 
-                    position: "relative", // Necesario para que 'top' funcione
-                    top: "-10px" // Ajuste fino: 2px hacia abajo
-                }}>{stats.comments}</span>
+                <span style={{ fontSize: "30px", color: isDarkMode ? "#8B98A5" : "#536471" }}>{stats.likes}</span>
               </div>
 
               {/* Views */}
@@ -185,12 +175,7 @@ export const QuoteCard = forwardRef<HTMLDivElement, QuoteCardProps>(
                   <path d="M12 20V4" />
                   <path d="M6 20v-6" />
                 </svg>
-                <span style={{ 
-                    fontSize: "30px", 
-                    color: isDarkMode ? "#8B98A5" : "#536471", 
-                    position: "relative", // Necesario para que 'top' funcione
-                    top: "-10px" // Ajuste fino: 2px hacia abajo
-                }}>{stats.comments}</span>
+                <span style={{ fontSize: "30px", color: isDarkMode ? "#8B98A5" : "#536471" }}>{stats.views}</span>
               </div>
             </div>
           )}
