@@ -115,7 +115,7 @@ export const QuoteCard = forwardRef<HTMLDivElement, QuoteCardProps>(
           <div
             style={{
               fontSize: aspectRatio === "square" ? "50px" : "56px",
-              fontWeight: isBold ? 700 : 500,
+              fontWeight: isBold ? 700 : 400,
               fontStyle: isItalic ? "italic" : "normal",
               color: isDarkMode ? "#ffffff" : "#000000",
               lineHeight: "1.4",
