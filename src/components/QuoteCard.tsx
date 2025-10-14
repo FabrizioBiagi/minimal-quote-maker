@@ -118,7 +118,7 @@ export const QuoteCard = forwardRef<HTMLDivElement, QuoteCardProps>(
               fontWeight: isBold ? 700 : 500,
               fontStyle: isItalic ? "italic" : "normal",
               color: isDarkMode ? "#ffffff" : "#000000",
-              lineHeight: "1",
+              lineHeight: "1.4",
               whiteSpace: "pre-wrap",
               wordBreak: "break-word",
             }}
