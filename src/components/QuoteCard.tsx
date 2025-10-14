@@ -50,8 +50,8 @@ export const QuoteCard = forwardRef<HTMLDivElement, QuoteCardProps>(
             <div
               style={{
                 marginTop: "18px",
-                width: "101px",
-                height: "101px",
+                width: "120px",
+                height: "120px",
                 borderRadius: "50%",
                 overflow: "hidden",
                 backgroundColor: isDarkMode ? "#1a1a1a" : "#f0f0f0",
@@ -91,7 +91,7 @@ export const QuoteCard = forwardRef<HTMLDivElement, QuoteCardProps>(
             <div>
               <div
                 style={{
-                  fontSize: "34px",
+                  fontSize: "40px",
                   fontWeight: 600,
                   color: isDarkMode ? "#ffffff" : "#000000",
                   marginBottom: "4px",
@@ -101,7 +101,7 @@ export const QuoteCard = forwardRef<HTMLDivElement, QuoteCardProps>(
               </div>
               <div
                 style={{
-                  fontSize: "30px",
+                  fontSize: "36px",
                   fontWeight: 400,
                   color: isDarkMode ? "#8B98A5" : "#5B7083",
                 }}
