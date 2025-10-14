@@ -123,7 +123,16 @@ export const QuoteCard = forwardRef<HTMLDivElement, QuoteCardProps>(
               wordBreak: "break-word",
             }}
           >
-            {quote || "Escribe tu frase inspiradora aquí..."}
+            {(quote || "Escribe tu frase inspiradora aquí...").split(/(\s+)/).map((word, index) => {
+              if (word.startsWith('#')) {
+                return (
+                  <span key={index} style={{ color: "#1DA1F2" }}>
+                    {word}
+                  </span>
+                );
+              }
+              return word;
+            })}
           </div>
 
           {/* Stats Section */}
