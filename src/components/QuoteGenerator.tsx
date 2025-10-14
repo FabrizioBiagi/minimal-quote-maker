@@ -31,6 +31,7 @@ export const QuoteGenerator = () => {
   const [username, setUsername] = useState("");
   const [quote, setQuote] = useState("");
   const [bulkQuotes, setBulkQuotes] = useState<string[]>([""]);
+  const [massiveText, setMassiveText] = useState("");
   const [isBold, setIsBold] = useState(false);
   const [isItalic, setIsItalic] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -205,6 +206,86 @@ export const QuoteGenerator = () => {
     }
   };
 
+  const processMassiveText = (text: string): string[] => {
+    // Split by ^" to separate different phrases
+    const phrases = text.split('^"').map(phrase => phrase.trim()).filter(phrase => phrase !== "");
+    
+    // Replace *" with line breaks within each phrase
+    return phrases.map(phrase => phrase.replace(/\*"/g, "\n"));
+  };
+
+  const downloadMassiveTextImages = async (aspectRatio: "square" | "vertical") => {
+    const processedQuotes = processMassiveText(massiveText);
+    
+    if (processedQuotes.length === 0) {
+      toast.error("Por favor ingresa al menos una frase");
+      return;
+    }
+
+    setIsGenerating(true);
+    
+    try {
+      for (let i = 0; i < processedQuotes.length; i++) {
+        const currentQuote = processedQuotes[i].trim();
+        const currentStats = generateRandomStats();
+        
+        // Create a temporary hidden div for this quote
+        const tempDiv = document.createElement("div");
+        tempDiv.style.position = "absolute";
+        tempDiv.style.left = "-9999px";
+        document.body.appendChild(tempDiv);
+        
+        // Render the QuoteCard into the temp div
+        const { createRoot } = await import("react-dom/client");
+        const root = createRoot(tempDiv);
+        
+        await new Promise<void>((resolve) => {
+          root.render(
+            <QuoteCard
+              profileImage={profileImage}
+              name={name}
+              username={username}
+              quote={currentQuote}
+              aspectRatio={aspectRatio}
+              isBold={isBold}
+              isItalic={isItalic}
+              isDarkMode={isDarkMode}
+              stats={currentStats}
+            />
+          );
+          setTimeout(resolve, 100);
+        });
+
+        const canvas = await html2canvas(tempDiv.firstChild as HTMLElement, {
+          backgroundColor: isDarkMode ? "#000000" : "#ffffff",
+          scale: 1,
+          logging: false,
+          width: 1080,
+          height: aspectRatio === "square" ? 1080 : 1920,
+        });
+
+        const link = document.createElement("a");
+        const suffix = aspectRatio === "square" ? "cuadrado" : "tiktok";
+        link.download = `quote-${i + 1}-${suffix}.png`;
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+
+        root.unmount();
+        document.body.removeChild(tempDiv);
+        
+        // Small delay between downloads
+        await new Promise(resolve => setTimeout(resolve, 500));
+      }
+
+      toast.success(`${processedQuotes.length} imágenes descargadas correctamente`);
+    } catch (error) {
+      console.error("Error generating massive text images:", error);
+      toast.error("Error al generar las imágenes");
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background py-12 px-4">
       {/* Hidden cards at full size for html2canvas capture */}
@@ -249,9 +330,10 @@ export const QuoteGenerator = () => {
           {/* Input Form */}
           <Card className="p-6 shadow-lg">
             <Tabs defaultValue="individual" className="w-full">
-              <TabsList className="grid w-full grid-cols-2 mb-6">
+              <TabsList className="grid w-full grid-cols-3 mb-6">
                 <TabsTrigger value="individual">Individual</TabsTrigger>
-                <TabsTrigger value="masivo">Masivo</TabsTrigger>
+                <TabsTrigger value="multiple">Múltiples Campos</TabsTrigger>
+                <TabsTrigger value="texto-masivo">Texto Masivo</TabsTrigger>
               </TabsList>
               
               <TabsContent value="individual" className="space-y-6">
@@ -410,7 +492,7 @@ export const QuoteGenerator = () => {
                 </div>
               </TabsContent>
 
-              <TabsContent value="masivo" className="space-y-6">
+              <TabsContent value="multiple" className="space-y-6">
                 <div>
                   <Label htmlFor="profile-image-bulk" className="text-base font-semibold mb-3 block">
                     Foto de Perfil
@@ -582,6 +664,165 @@ export const QuoteGenerator = () => {
                   </Button>
                   <Button
                     onClick={() => downloadBulkImages("vertical")}
+                    disabled={isGenerating}
+                    variant="secondary"
+                    className="w-full"
+                    size="lg"
+                  >
+                    <Download className="w-4 h-4 mr-2" />
+                    Descargar Todas 9:16 (1080x1920)
+                  </Button>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="texto-masivo" className="space-y-6">
+                <div>
+                  <Label htmlFor="profile-image-massive" className="text-base font-semibold mb-3 block">
+                    Foto de Perfil
+                  </Label>
+                  <div className="flex items-center gap-4">
+                    {profileImage ? (
+                      <img
+                        src={profileImage}
+                        alt="Preview"
+                        className="w-20 h-20 rounded-full object-cover border-2 border-border"
+                      />
+                    ) : (
+                      <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center">
+                        <ImageIcon className="w-8 h-8 text-muted-foreground" />
+                      </div>
+                    )}
+                    <label htmlFor="profile-image-massive">
+                      <Button variant="secondary" className="cursor-pointer" asChild>
+                        <span>
+                          <Upload className="w-4 h-4 mr-2" />
+                          Cargar Imagen
+                        </span>
+                      </Button>
+                    </label>
+                    <input
+                      id="profile-image-massive"
+                      type="file"
+                      accept="image/jpeg,image/png,image/jpg"
+                      onChange={handleImageUpload}
+                      className="hidden"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <Label htmlFor="name-massive" className="text-base font-semibold mb-3 block">
+                    Nombre
+                  </Label>
+                  <Input
+                    id="name-massive"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Ingresa tu nombre"
+                    className="text-base"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="username-massive" className="text-base font-semibold mb-3 block">
+                    Usuario
+                  </Label>
+                  <div className="relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                      @
+                    </span>
+                    <Input
+                      id="username-massive"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      placeholder="usuario"
+                      className="text-base pl-8"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <Label htmlFor="massive-text" className="text-base font-semibold mb-3 block">
+                    Texto Masivo
+                  </Label>
+                  <p className="text-sm text-muted-foreground mb-2">
+                    Usa <code className="bg-muted px-1 py-0.5 rounded">^"</code> para separar frases y <code className="bg-muted px-1 py-0.5 rounded">*"</code> para saltos de línea
+                  </p>
+                  <Textarea
+                    id="massive-text"
+                    value={massiveText}
+                    onChange={(e) => setMassiveText(e.target.value)}
+                    placeholder='Ejemplo: Primera frase aquí^"Segunda frase*"con salto de línea^"Tercera frase...'
+                    className="min-h-[200px] text-base resize-none font-mono"
+                  />
+                </div>
+
+                <div>
+                  <Label className="text-base font-semibold mb-3 block">
+                    Estilo de Texto
+                  </Label>
+                  <div className="flex gap-6">
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="bold-massive"
+                        checked={isBold}
+                        onCheckedChange={(checked) => setIsBold(checked as boolean)}
+                      />
+                      <label
+                        htmlFor="bold-massive"
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      >
+                        Negrita
+                      </label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="italic-massive"
+                        checked={isItalic}
+                        onCheckedChange={(checked) => setIsItalic(checked as boolean)}
+                      />
+                      <label
+                        htmlFor="italic-massive"
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      >
+                        Cursiva
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <Label className="text-base font-semibold mb-3 block">
+                    Tema
+                  </Label>
+                  <div className="flex items-center space-x-3">
+                    <Switch
+                      id="dark-mode-massive"
+                      checked={isDarkMode}
+                      onCheckedChange={setIsDarkMode}
+                    />
+                    <label
+                      htmlFor="dark-mode-massive"
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-2"
+                    >
+                      <Moon className="w-4 h-4" />
+                      Modo Oscuro
+                    </label>
+                  </div>
+                </div>
+
+                <div className="pt-4 space-y-3">
+                  <Button
+                    onClick={() => downloadMassiveTextImages("square")}
+                    disabled={isGenerating}
+                    className="w-full"
+                    size="lg"
+                  >
+                    <Download className="w-4 h-4 mr-2" />
+                    Descargar Todas 1:1 (1080x1080)
+                  </Button>
+                  <Button
+                    onClick={() => downloadMassiveTextImages("vertical")}
                     disabled={isGenerating}
                     variant="secondary"
                     className="w-full"
